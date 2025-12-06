@@ -203,10 +203,16 @@ namespace Calculator
         private void btnEqual_Click(object sender, EventArgs e)
         {
             string text= txtDisplay.Text;
+            string convertedText = System.Text.RegularExpressions.Regex.Replace(
+                text,
+                @"(\d+\.?\d*)\^(\d+\.?\d*)",
+                "Pow($1,$2)"
+            );
             try
             {
-                Expression expression = new Expression(text);
+                Expression expression = new Expression(convertedText);
                 object result = expression.Evaluate();
+                result=Convert.ToDouble(result);
                 double roundedResult = Math.Round((double)result, 4, MidpointRounding.AwayFromZero);
                 txtDisplay.Text = Convert.ToDouble(roundedResult).ToString("G", System.Globalization.CultureInfo.InvariantCulture);
             }
